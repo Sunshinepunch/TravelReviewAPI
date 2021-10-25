@@ -9,10 +9,10 @@ namespace Travel.Models
 
     public int ReviewId {get;set;}
     [Required]
-    public string Rating {get;set;}
+    public int Rating {get;set;}
     [Required]
     public string Comment {get;set;}
-    public virtual Location location {get;set;}
+    public string Location {get;set;}
 
   }
 }
