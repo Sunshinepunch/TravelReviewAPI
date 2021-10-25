@@ -12,7 +12,6 @@ namespace Travel.Models
     public string Rating {get;set;}
     [Required]
     public string Comment {get;set;}
-    [Required]
     public virtual Location location {get;set;}
 
   }
