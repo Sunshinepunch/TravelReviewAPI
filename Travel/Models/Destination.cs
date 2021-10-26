@@ -12,6 +12,7 @@ namespace Travel.Models
     [Required]
     public string Name {get;set;}
 
+
     public virtual ICollection<Review> Reviews { get; set; }
 
   }

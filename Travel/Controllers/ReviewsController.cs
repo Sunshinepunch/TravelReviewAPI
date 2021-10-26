@@ -107,7 +107,7 @@ namespace Travel.Controllers
 
         //search/?{parameter}={value}&{paramter}={value}
         [HttpGet("search/")]
-        public async Task<ActionResult<IEnumerable<Review>>> Search(int rating)
+        public async Task<ActionResult<IEnumerable<Review>>> Search(int rating, string destination)
         {
         var query = _context.Reviews.AsQueryable();
         
@@ -117,12 +117,26 @@ namespace Travel.Controllers
             query = query.Where(entry => entry.Rating == rating);
         }
 
-        // if (destination != null)
-        // {
-        //     query = query.Where(entry => entry.Destination.Name == destination);
-        // }
+        if (destination != null)
+        {
+            query = query.Where(entry => entry.destination.Name == destination);
+        }
 
         return await query.ToListAsync();
+        }
+
+
+        [HttpGet("search/reviews/{DestinationId}")]
+        public async Task<ActionResult<IEnumerable<Review>>> GetReviews(int DestinationId)
+        {
+            var query = _context.Reviews.AsQueryable();
+            
+            if (DestinationId != 0)
+            {
+                query = query.Where(entry => entry.DestinationId == DestinationId);
+            }
+
+            return await query.ToListAsync();
         }
         
         [HttpGet("random")]
