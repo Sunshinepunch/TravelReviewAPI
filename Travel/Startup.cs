@@ -20,7 +20,7 @@ namespace Travel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddSwaggerGen();
             services.AddDbContext<TravelContext>(opt =>
                 opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
             services.AddControllers();
@@ -29,6 +29,9 @@ namespace Travel
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {c.RoutePrefix = "swagger"; c.SwaggerEndpoint("/swagger/v1/swagger.json", "test");} );
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
