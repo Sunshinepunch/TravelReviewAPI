@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace Travel
 {
@@ -24,17 +25,49 @@ namespace Travel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //adds swagger Ui
             services.AddSwaggerGen();
+            //adds Travel context
             services.AddDbContext<TravelContext>(opt =>
                 opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
             SetupJWTServices(services);
+
+            //this adds the user context
+            services.AddDbContext<TravelContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
             services.AddControllers();
+            // adds Identity
+            services.AddIdentity<ApplicationUser, IdentityRole>()  
+                .AddEntityFrameworkStores<TravelContext>()  
+                .AddDefaultTokenProviders();
+            
+            //adds Authentication with User and JWT tokens    
+            services.AddAuthentication(options =>  
+            {  
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
+            })
+            // adds Jwt Bearer
+            .AddJwtBearer(options =>  
+            {  
+                options.SaveToken = true;  
+                options.RequireHttpsMetadata = false;  
+                options.TokenValidationParameters = new TokenValidationParameters()  
+                {  
+                    ValidateIssuer = true,  
+                    ValidateAudience = true,  
+                    ValidAudience = Configuration["JWT:ValidAudience"],  
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],  
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))  
+                };  
+            });
         }
+
 
         private void SetupJWTServices(IServiceCollection services)
         {
             string key = "TornadoOfZombieWerewolves"; //this should be same which is used while creating token
-            var issuer = "http://mysite.com";  //this should be same which is used while creating token
+            var issuer = "http://localhost:5000";  //this should be same which is used while creating token
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
@@ -79,7 +112,7 @@ namespace Travel
             app.UseRouting();
 
             app.UseAuthentication();
-              
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

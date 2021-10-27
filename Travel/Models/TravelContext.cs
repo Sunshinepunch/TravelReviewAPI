@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Travel.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity; 
+  
 
 namespace Travel.Models
 {
-    public class TravelContext : DbContext
+    public class TravelContext : IdentityDbContext<ApplicationUser>
     {
         public TravelContext(DbContextOptions<TravelContext> options)
             : base(options)
@@ -31,8 +34,17 @@ namespace Travel.Models
         new Destination { DestinationId = 4, Name = "Hogwarts"},
         new Destination { DestinationId = 5, Name = "My Bathroom"}
         );
+        base.OnModelCreating(builder);
+        builder.Ignore <IdentityUserLogin<string>>();
+        builder.Ignore <IdentityUserRole<string>>();
+        builder.Ignore<IdentityUserClaim<string>>();
+        builder.Ignore<IdentityUserToken<string>>();
+        builder.Ignore<IdentityUser<string>>();
+        builder.Ignore<ApplicationUser>();  
 
         }
+
+
     }
 }
 

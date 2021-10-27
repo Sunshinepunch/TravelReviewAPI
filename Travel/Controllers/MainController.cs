@@ -29,7 +29,7 @@ namespace Travel.Controllers
       public Object GetToken()
       {
           string key = "TornadoOfZombieWerewolves"; //Secret key which will be used later during validation
-          var issuer = "https://mysite.com";  //normally this will be your site URL
+          var issuer = "http://localhost:5000";  //normally this will be your site URL
 
           var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
           var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -80,24 +80,3 @@ namespace Travel.Controllers
       }
   }
 }
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlZTA5Y2QzMS02YzE4LTRkM2UtOTE1Zi02OWQwYjA1MDZhYTAiLCJ2YWxpZCI6IjEiLCJ1c2VyaWQiOiIxIiwibmFtZSI6ImJpbGFsIiwiZXhwIjoxNjM1MzcwMDcyLCJpc3MiOiJodHRwczovL215c2l0ZS5jb20iLCJhdWQiOiJodHRwczovL215c2l0ZS5jb20ifQ.eP276W9XKV497ijbSzGOpUPE0EIiHUQ47eQqJvN_8cs
-// {
-//   "jti": "a15fc80b-95c7-4e3e-8e1f-9a838ff1d139",
-//   "valid": "1",
-//   "userid": "1",
-//   "name": "bilal",
-//   "exp": 1635370100,
-//   "iss": "https://mysite.com",
-//   "aud": "https://mysite.com"
-// }
-
-  // {
-  //   "jti": "ee09cd31-6c18-4d3e-915f-69d0b0506aa0",
-  //   "valid": "1",
-  //   "userid": "1",
-  //   "name": "bilal",
-  //   "exp": 1635370072,
-  //   "iss": "https://mysite.com",
-  //   "aud": "https://mysite.com"
-  // }
