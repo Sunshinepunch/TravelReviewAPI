@@ -83,6 +83,7 @@ namespace Travel.Controllers
             Destination thisDestination = _context.Destinations.FirstOrDefault(destination => destination.DestinationId == review.DestinationId);
             _context.Reviews.Add(review);
             thisDestination.Reviews.Add(review);
+            review.destination = thisDestination;
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetReview", new { id = review.ReviewId }, review);

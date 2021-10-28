@@ -24,11 +24,19 @@ namespace Travel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+
+            services.AddEntityFrameworkMySql()
+            .AddDbContext<TravelContext>(options => options
+            .UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
+            
             services.AddSwaggerGen();
             services.AddDbContext<TravelContext>(opt =>
                 opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
             SetupJWTServices(services);
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
         }
 
         private void SetupJWTServices(IServiceCollection services)
@@ -79,7 +87,7 @@ namespace Travel
             app.UseRouting();
 
             app.UseAuthentication();
-              
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
