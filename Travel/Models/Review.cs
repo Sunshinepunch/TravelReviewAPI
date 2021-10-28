@@ -13,7 +13,6 @@ namespace Travel.Models
     [Required]
     public string Comment {get;set;}
     public int DestinationId {get;set;}
-    public virtual Destination destination {get;set;}
 
 
   }

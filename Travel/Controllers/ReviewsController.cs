@@ -80,7 +80,9 @@ namespace Travel.Controllers
         [HttpPost]
         public async Task<ActionResult<Review>> PostReview(Review review)
         {
+            Destination thisDestination = _context.Destinations.FirstOrDefault(destination => destination.DestinationId == review.DestinationId);
             _context.Reviews.Add(review);
+            thisDestination.Reviews.Add(review);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetReview", new { id = review.ReviewId }, review);
@@ -109,7 +111,7 @@ namespace Travel.Controllers
 
         //search/?{parameter}={value}&{paramter}={value}
         [HttpGet("search/")]
-        public async Task<ActionResult<IEnumerable<Review>>> Search(int rating, string destination)
+        public async Task<ActionResult<IEnumerable<Review>>> Search(int rating)
         {
         var query = _context.Reviews.AsQueryable();
         
@@ -119,10 +121,6 @@ namespace Travel.Controllers
             query = query.Where(entry => entry.Rating == rating);
         }
 
-        if (destination != null)
-        {
-            query = query.Where(entry => entry.destination.Name == destination);
-        }
 
         return await query.ToListAsync();
         }

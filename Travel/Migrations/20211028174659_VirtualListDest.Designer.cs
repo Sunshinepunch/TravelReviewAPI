@@ -8,8 +8,8 @@ using Travel.Models;
 namespace Travel.Migrations
 {
     [DbContext(typeof(TravelContext))]
-    [Migration("20211025213625_PresetData")]
-    partial class PresetData
+    [Migration("20211028174659_VirtualListDest")]
+    partial class VirtualListDest
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -17,6 +17,48 @@ namespace Travel.Migrations
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.11");
+
+            modelBuilder.Entity("Travel.Models.Destination", b =>
+                {
+                    b.Property<int>("DestinationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("DestinationId");
+
+                    b.ToTable("Destinations");
+
+                    b.HasData(
+                        new
+                        {
+                            DestinationId = 1,
+                            Name = "Jurassic World"
+                        },
+                        new
+                        {
+                            DestinationId = 2,
+                            Name = "Chicago"
+                        },
+                        new
+                        {
+                            DestinationId = 3,
+                            Name = "Rivendell"
+                        },
+                        new
+                        {
+                            DestinationId = 4,
+                            Name = "Hogwarts"
+                        },
+                        new
+                        {
+                            DestinationId = 5,
+                            Name = "My Bathroom"
+                        });
+                });
 
             modelBuilder.Entity("Travel.Models.Review", b =>
                 {
@@ -28,13 +70,15 @@ namespace Travel.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Location")
-                        .HasColumnType("longtext");
+                    b.Property<int>("DestinationId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
                     b.HasKey("ReviewId");
+
+                    b.HasIndex("DestinationId");
 
                     b.ToTable("Reviews");
 
@@ -43,37 +87,51 @@ namespace Travel.Migrations
                         {
                             ReviewId = 1,
                             Comment = "Great Parks but the birds seem angry!",
-                            Location = "Jurassic World",
+                            DestinationId = 1,
                             Rating = 4
                         },
                         new
                         {
                             ReviewId = 2,
                             Comment = "Don't like beans",
-                            Location = "Chicago",
+                            DestinationId = 2,
                             Rating = 1
                         },
                         new
                         {
                             ReviewId = 3,
                             Comment = "A gorgeous man proposed to me with a ring",
-                            Location = "Rivendell",
+                            DestinationId = 3,
                             Rating = 5
                         },
                         new
                         {
                             ReviewId = 4,
                             Comment = "No wheelchair ramps",
-                            Location = "Hogwarts",
+                            DestinationId = 4,
                             Rating = 3
                         },
                         new
                         {
                             ReviewId = 5,
                             Comment = "Lonely",
-                            Location = "My bathroom",
+                            DestinationId = 5,
                             Rating = 3
                         });
+                });
+
+            modelBuilder.Entity("Travel.Models.Review", b =>
+                {
+                    b.HasOne("Travel.Models.Destination", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("DestinationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Travel.Models.Destination", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }
