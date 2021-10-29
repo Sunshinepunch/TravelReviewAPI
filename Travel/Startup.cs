@@ -25,12 +25,20 @@ namespace Travel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             //adds swagger Ui
+
+            services.AddMvc();
+
+          
+            
+
             services.AddSwaggerGen();
             //adds Travel context
             services.AddDbContext<TravelContext>(opt =>
                 opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
             SetupJWTServices(services);
+
 
             //this adds the user context
             services.AddDbContext<TravelContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
@@ -61,6 +69,11 @@ namespace Travel
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))  
                 };  
             });
+
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
         }
 
 

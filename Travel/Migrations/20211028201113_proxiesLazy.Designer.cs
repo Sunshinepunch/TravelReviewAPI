@@ -8,8 +8,8 @@ using Travel.Models;
 namespace Travel.Migrations
 {
     [DbContext(typeof(TravelContext))]
-    [Migration("20211026170403_Destination")]
-    partial class Destination
+    [Migration("20211028201113_proxiesLazy")]
+    partial class proxiesLazy
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -8,13 +8,16 @@ namespace Travel.Models
 {
     public class TravelContext : IdentityDbContext<ApplicationUser>
     {
+
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Destination> Destinations { get; set;}
+
         public TravelContext(DbContextOptions<TravelContext> options)
             : base(options)
         {
         }
 
-        public DbSet<Review> Reviews { get; set; }
-        public DbSet<Destination> Destinations { get; set;}
+
 
     protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -43,7 +46,6 @@ namespace Travel.Models
         builder.Ignore<ApplicationUser>();  
 
         }
-
 
     }
 }
