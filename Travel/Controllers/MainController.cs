@@ -29,7 +29,7 @@ namespace Travel.Controllers
       public Object GetToken()
       {
           string key = "TornadoOfZombieWerewolves"; //Secret key which will be used later during validation
-          var issuer = "https://mysite.com";  //normally this will be your site URL
+          var issuer = "http://localhost:5000";  //normally this will be your site URL
 
           var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
           var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -80,5 +80,3 @@ namespace Travel.Controllers
       }
   }
 }
-
-
